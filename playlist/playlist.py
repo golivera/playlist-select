@@ -11,6 +11,7 @@ PASSWORD = 'Admin'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+queue = []
 
 
 @app.route('/')
@@ -21,6 +22,7 @@ def home():
 @app.route('/add-song', methods=['POST'])
 def add_song():
     song_id = request.form['songId']
+    queue.append(song_id)
     return "added song {}".format(song_id)
 
 @app.route('/media-action', methods=['POST'])
@@ -28,7 +30,7 @@ def process_media_action():
     action = request.form['action']
 
     if action == "play":
-        utils.play_song()
+        utils.play_song(queue)
     elif action == "pause":
         utils.pause_song()
     elif action == "stop":

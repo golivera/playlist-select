@@ -28,19 +28,27 @@ def setup_song_db(app, music_dir=None):
     for root, dirs, files in os.walk(music_dir):
         for cur_file in files:
             file_path = os.path.abspath(os.path.join(root, cur_file))
-            if os.path.splitext(cur_file) in music_formats:
+            file_ext = os.path.splitext(file_path)[-1]
+            if file_ext in music_formats:
                 mydb.insert_song(cur_file, file_path)
 
 
 # VLC Utility Methods
-def play_song(filepath):
-
-    if not filepath or not os.path.isfile(filepath):
+def play_song(queue):
+    if not queue:
+        print "Queue is empty"
         return
 
-    print "Playing: {}".format(filepath)
+    print "Preparing to play song with id {}".format(queue[0])
 
-    media = instance.media_new(unicode(filepath))
+    song_data = mydb.get_song_data(queue.pop())
+    print song_data
+
+    if not song_data or not os.path.isfile(song_data['file_path']):
+        return
+
+    print "Playing: {}".format(song_data['name'])
+    media = instance.media_new(unicode(song_data['file_path']))
     mediaplayer.set_media(media)
     mediaplayer.play()
 

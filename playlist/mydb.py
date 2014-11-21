@@ -4,7 +4,7 @@ from contextlib import closing
 def connect_db():
     return sqlite3.connect('/tmp/music.db')
 
-def insert_song(title,path):
+def insert_song(title, path):
     query = "INSERT INTO tracks (title, path) VALUES ('{}','{}')".format(title,path)
 
     with closing(connect_db()) as db:
@@ -23,12 +23,13 @@ def get_song_titles():
     return song_list
 
 def get_song_data(song_id):
-    query = "SELECT * FROM tracks WHERE {} = table.song_id".format(song_id)
+    query = "SELECT * FROM tracks WHERE tracks.id={}".format(song_id)
 
     with closing(connect_db()) as db:
         results = db.cursor().execute(query)
-        song_title, song_path = results[1], results[2]
-        return {'title' : song_title,
+        for result in results:
+            song_title, song_path = result[1], result[2]
+        return {'name' : song_title,
                 'file_path' : song_path}
 
 def display_database():
