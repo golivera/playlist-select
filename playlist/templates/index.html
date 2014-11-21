@@ -1,0 +1,20 @@
+<!doctype html>
+<title>Playlist</title>
+
+<head>
+
+</head>
+<body>
+    <ul>
+        {% for song in session.available_songs %}
+        <li>{{ song }}</li>
+        {% endfor %}
+    </ul>
+
+    <input type="text" name="next-song">
+    <button id="add-song" type="button">Add Song</button>
+
+    <script>
+        
+    </script>
+</body>
