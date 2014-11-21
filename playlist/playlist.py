@@ -1,8 +1,11 @@
 import sqlite3
 import os
+import argparse
 
 from flask import Flask, session, render_template, request
 from contextlib import closing
+
+import utils
 
 # config for database
 DATABASE = '/tmp/music.db'
@@ -31,20 +34,30 @@ def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 
 def init_db():
+    print "Initializing db..."
     with connect_db() as db:
 	    with app.open_resource('schema.sql', mode='r') as f:
 	        db.cursor().executescript(f.read())
     db.commit()
 
-def setup_song_db():
-    print "Setting up song DB"
-    for root, dirs, files in os.walk('test_music'):
+def setup_song_db(music_dir=None):
+    print "Updating song DB..."
+
+    if not music_dir:
+        music_dir = "test_music"
+
+    for root, dirs, files in os.walk(music_dir):
         for cur_file in files:
             file_path = os.path.abspath(os.path.join(root, cur_file))
-            print file_path
+            # TODO: Error checking for correct music formats
+            # TODO: Insert Song into DB
 
 if __name__ == '__main__':
+    args = utils.init_parser()
+
+    if args.update:
+        setup_song_db(args.path)
+
     app.debug = True
-    setup_song_db()
     app.run()
 
