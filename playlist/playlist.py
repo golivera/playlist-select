@@ -1,9 +1,4 @@
-import sqlite3
-import os
-import argparse
-
 from flask import Flask, session, render_template, request
-from contextlib import closing
 
 import utils
 
@@ -54,8 +49,9 @@ def init_db():
 if __name__ == '__main__':
     args = utils.init_parser()
 
+    print args.update
     if args.update:
-        utils.setup_song_db(args.path)
+        utils.setup_song_db(app, args.path)
 
     app.debug = True
     app.run()

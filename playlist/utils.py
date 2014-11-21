@@ -1,5 +1,7 @@
 import argparse
 import vlc
+import os
+import mydb
 
 instance = vlc.Instance()
 mediaplayer = instance.media_player_new()
@@ -10,15 +12,14 @@ def init_parser():
     parser.add_argument("-u", "--update", action='store_true', help="Run database update")
     return parser.parse_args()
 
-
+#return list of songs
 def get_available_songs():
-    # TODO: Query DB for songs
-    songs = [(n,"song-{}".format(n),) for n in range(10)]
-    return songs
+    return mydb.get_song_titles()
 
 
-def setup_song_db(music_dir=None):
+def setup_song_db(app, music_dir=None):
     print "Updating song DB..."
+    mydb.init_db(app)
 
     if not music_dir:
         music_dir = "test_music"
@@ -27,7 +28,7 @@ def setup_song_db(music_dir=None):
         for cur_file in files:
             file_path = os.path.abspath(os.path.join(root, cur_file))
             # TODO: Error checking for correct music formats
-            # TODO: Insert Song into DB
+            mydb.insert_song(cur_file, file_path)
 
 
 # VLC Utility Methods
