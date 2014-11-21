@@ -4,19 +4,29 @@
     <script src="{{ url_for('static', filename='jquery-1.11.1.js') }}" type="text/javascript"></script>
 </head>
 <body>
+    <section>
+    <h1>Available</h1>
     <ul>
-        {% for song in session.available_songs %}
-        <li>{{ song }}</li>
+        {% for id,song in session.available_songs %}
+        <li data-song-id="{{ id }}">{{ song }}</li>
         {% endfor %}
     </ul>
+    </section>
 
-    <input type="text" name="next-song">
-    <button id="add-song" type="button">Add Song</button>
+    <section>
+    <h1>Playlist Queue</h1>
+    <ul id="active-playlist"></ul>
+    </section>
 
     <script>
-    $("#add-song").click(function() {
-        $.post("{{ url_for('add_song') }}", function(data) {
+    $("li").click(function() {
+        var songName = $(this).text();
+        var songId = $(this).data("song-id");
+        console.log("id: " + songId + " - " + songName);
+        $.post("{{ url_for('add_song') }}", {'songId': songId}, function(data) {
             console.log(data);
+            var newSong = "<li data-song-id='" + songId + "'>" + songName + "</li>"; 
+            $("#active-playlist").append(newSong);
         });
     });
     </script>
