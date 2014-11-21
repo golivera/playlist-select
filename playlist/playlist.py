@@ -1,9 +1,4 @@
-import sqlite3
-import os
-import argparse
-
 from flask import Flask, session, render_template, request
-from contextlib import closing
 
 import utils
 
@@ -25,18 +20,8 @@ def home():
 
 @app.route('/add-song', methods=['POST'])
 def add_song():
-    song_id = request.form['songId']
+    song_id = request.form['song_id']
     return "added song {}".format(song_id)
-
-def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
-
-def init_db():
-    print "Initializing db..."
-    with connect_db() as db:
-	    with app.open_resource('schema.sql', mode='r') as f:
-	        db.cursor().executescript(f.read())
-    db.commit()
 
 if __name__ == '__main__':
     args = utils.init_parser()
