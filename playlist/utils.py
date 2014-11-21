@@ -34,7 +34,6 @@ def setup_song_db(app, music_dir=None):
 # VLC Utility Methods
 def play_song():
     # TODO: Check File Exists
-    filepath = ""
     # TODO: Get top of song queue
     media = instance.media_new(unicode(filepath))
     mediaplayer.set_media(media)

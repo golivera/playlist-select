@@ -49,7 +49,6 @@ def init_db():
 if __name__ == '__main__':
     args = utils.init_parser()
 
-    print args.update
     if args.update:
         utils.setup_song_db(app, args.path)
 
