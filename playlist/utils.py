@@ -1,6 +1,9 @@
 import argparse
 import vlc
 
+instance = vlc.Instance()
+mediaplayer = instance.media_player_new()
+
 def init_parser():
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", "--path", help="Input music directory")
@@ -28,7 +31,14 @@ def setup_song_db(music_dir=None):
 
 
 # VLC Utility Methods
-def play_song():
-    # Check File
-    pass
+def play_song(filepath):
+    # TODO: Check File Exists
+    if not filepath:
+        return
+
+    print "Playing: {}".format(filepath)
+
+    media = instance.media_new(unicode(filepath))
+    mediaplayer.set_media(media)
+    mediaplayer.play()
 

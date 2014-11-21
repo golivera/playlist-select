@@ -17,6 +17,7 @@ PASSWORD = 'Admin'
 app = Flask(__name__)
 app.config.from_object(__name__)
 
+
 @app.route('/')
 def home():
     session.available_songs = utils.get_available_songs()
