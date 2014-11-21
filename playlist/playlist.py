@@ -19,8 +19,6 @@ app.config.from_object(__name__)
 
 @app.route('/')
 def home():
-    init_db()
-    print 'database initalized'
     session.available_songs = ["song-{}".format(n) for n in range(10)]
     session.available_songs = [(n,"song-{}".format(n),) for n in range(10)]
     return render_template('index.html')
