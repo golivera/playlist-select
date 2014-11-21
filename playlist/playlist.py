@@ -19,8 +19,7 @@ app.config.from_object(__name__)
 
 @app.route('/')
 def home():
-    session.available_songs = ["song-{}".format(n) for n in range(10)]
-    session.available_songs = [(n,"song-{}".format(n),) for n in range(10)]
+    session.available_songs = utils.get_available_songs()
     return render_template('index.html')
 
 @app.route('/add-song', methods=['POST'])
@@ -38,23 +37,11 @@ def init_db():
 	        db.cursor().executescript(f.read())
     db.commit()
 
-def setup_song_db(music_dir=None):
-    print "Updating song DB..."
-
-    if not music_dir:
-        music_dir = "test_music"
-
-    for root, dirs, files in os.walk(music_dir):
-        for cur_file in files:
-            file_path = os.path.abspath(os.path.join(root, cur_file))
-            # TODO: Error checking for correct music formats
-            # TODO: Insert Song into DB
-
 if __name__ == '__main__':
     args = utils.init_parser()
 
     if args.update:
-        setup_song_db(args.path)
+        utils.setup_song_db(args.path)
 
     app.debug = True
     app.run()
