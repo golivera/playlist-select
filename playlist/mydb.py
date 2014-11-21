@@ -22,6 +22,14 @@ def get_song_titles():
 
     return song_list
 
+def get_song_data(song_id):
+    query = "SELECT * FROM tracks WHERE {} = table.song_id".format(song_id)
+
+    with closing(connect_db()) as db:
+        results = db.cursor().execute(query)
+        song_title, song_path = results[1], results[2]
+        return {'title' : song_title,
+                'file_path' : song_path}
 
 def display_database():
     query = "SELECT * FROM tracks"
