@@ -36,15 +36,6 @@ def process_media_action():
 
     return "{}".format(action)
 
-def connect_db():
-    return sqlite3.connect(app.config['DATABASE'])
-
-def init_db():
-    print "Initializing db..."
-    with connect_db() as db:
-	    with app.open_resource('schema.sql', mode='r') as f:
-	        db.cursor().executescript(f.read())
-    db.commit()
 
 if __name__ == '__main__':
     args = utils.init_parser()
