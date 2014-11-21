@@ -31,14 +31,19 @@ def setup_song_db(music_dir=None):
 
 
 # VLC Utility Methods
-def play_song(filepath):
+def play_song():
     # TODO: Check File Exists
-    if not filepath:
-        return
-
-    print "Playing: {}".format(filepath)
-
+    filepath = ""
+    # TODO: Get top of song queue
     media = instance.media_new(unicode(filepath))
     mediaplayer.set_media(media)
     mediaplayer.play()
+
+
+def pause_song():
+    mediaplayer.pause()
+
+
+def stop_song():
+    mediaplayer.stop()
 

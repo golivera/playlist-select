@@ -28,6 +28,19 @@ def add_song():
     song_id = request.form['songId']
     return "added song {}".format(song_id)
 
+@app.route('/media-action', methods=['POST'])
+def process_media_action():
+    action = request.form['action']
+
+    if action == "play":
+        utils.play_song()
+    elif action == "pause":
+        utils.pause_song()
+    elif action == "stop":
+        utils.stop_song()
+
+    return "{}".format(action)
+
 def connect_db():
     return sqlite3.connect(app.config['DATABASE'])
 

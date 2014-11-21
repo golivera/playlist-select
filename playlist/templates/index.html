@@ -14,11 +14,19 @@
     </section>
 
     <section>
-    <h1>Playlist Queue</h1>
-    <ul id="active-playlist"></ul>
+        <button type="button" class="media-action" id="stop">Stop</button>
+        <button type="button" class="media-action" id="pause">Pause</button>
+        <button type="button" class="media-action" id="play">Play</button>
+    </section>
+
+    <section>
+        <h1>Playlist Queue</h1>
+        <ul id="active-playlist"></ul>
     </section>
 
     <script>
+
+    // Event Listeners
     $("li").click(function() {
         var songName = $(this).text();
         var songId = $(this).data("song-id");
@@ -27,6 +35,22 @@
             console.log(data);
             var newSong = "<li data-song-id='" + songId + "'>" + songName + "</li>"; 
             $("#active-playlist").append(newSong);
+        });
+    });
+
+    $("#pause").click(function() {
+        var action = $(this).text();
+        if(action === "Pause") {
+            $(this).text("Continue");
+        } else {
+            $(this).text("Pause");
+        }
+    });
+
+    $(".media-action").click(function() {
+        var action = $(this).attr('id');
+        $.post("{{ url_for('process_media_action') }}", {'action': action}, function(data) {
+            console.log(data); 
         });
     });
     </script>
