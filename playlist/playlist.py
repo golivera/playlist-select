@@ -45,6 +45,8 @@ if __name__ == '__main__':
     if args.update:
         utils.setup_song_db(app, args.path)
 
-    app.debug = True
+    if args.dev:
+        print "Running in Debug Mode"
+        app.debug = True
     app.run()
 
