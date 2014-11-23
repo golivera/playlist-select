@@ -1,6 +1,8 @@
+import utils
+import json
+
 from flask import Flask, session, render_template, request
 
-import utils
 
 # config for database
 DATABASE = '/tmp/music.db'
@@ -16,7 +18,6 @@ queue = []
 
 @app.route('/')
 def home():
-    session.available_songs = utils.get_available_songs()
     return render_template('index.html')
 
 @app.route('/add-song', methods=['POST'])
@@ -24,6 +25,11 @@ def add_song():
     song_id = request.form['songId']
     queue.append(song_id)
     return "added song {}".format(song_id)
+
+@app.route('/all-songs')
+def get_all_songs():
+    available_songs = utils.get_available_songs()
+    return json.dumps(available_songs)
 
 @app.route('/media-action', methods=['POST'])
 def process_media_action():

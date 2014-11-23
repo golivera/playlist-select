@@ -5,14 +5,16 @@
     <script src="{{ url_for('static', filename='angular.js') }}" type="text/javascript"></script>
 </head>
 <body>
-    <section>
+    {% raw %}
+    <section ng-app="mediaApp" ng-controller="mediaCtrl">
     <h1>Available</h1>
     <ul>
-        {% for id,song in session.available_songs %}
-        <li data-song-id="{{ id }}">{{ song }}</li>
-        {% endfor %}
+        <li ng-repeat="song in availableSongs">
+            <span>{{ song.name }}</span> 
+        </li>
     </ul>
     </section>
+    {% endraw %}
 
     <section>
         <button type="button" class="media-action" id="stop">Stop</button>
@@ -26,6 +28,16 @@
     </section>
 
     <script>
+
+    var mediaApp = angular.module('mediaApp', []);
+
+    mediaApp.controller('mediaCtrl', function ($scope, $http) {
+        $http.get('/all-songs').success(function(data) {
+            $scope.availableSongs = data;
+        });
+
+    });
+
 
     // Event Listeners
     $("li").click(function() {

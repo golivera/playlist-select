@@ -18,7 +18,7 @@ def get_song_titles():
     with closing(connect_db()) as db:
         results = db.cursor().execute(query)
         for song_id, song_name, _ in results:
-            song_list.append((song_id, song_name))
+            song_list.append({'id': song_id, 'name': song_name})
 
     return song_list
 
