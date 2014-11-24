@@ -1,18 +1,18 @@
-drop table if exists tracks;
-drop table if exists artists;
-drop table if exists albums;
-create table tracks (
+drop table if exists track;
+drop table if exists artist;
+drop table if exists album;
+create table track(
   id integer primary key autoincrement,
   title text not null,
   path text not null
 );
-create table artists(
+create table artist(
   id integer primary key autoincrement,
   name text not null
 );
-create table albums(
+create table album(
   id integer primary key autoincrement,
   name text not null,
   art_path text,
   artist_name text,
-  foreign key(artist_name) references artists(name));
+  foreign key(artist_name) references artist(name));

@@ -7,7 +7,7 @@ def connect_db():
 
 
 def insert_song(title, path):
-    query = "INSERT INTO tracks (title, path) VALUES ('{}','{}')".format(title,path)
+    query = "INSERT INTO track (title, path) VALUES ('{}','{}')".format(title,path)
 
     with closing(connect_db()) as db:
         db.cursor().execute(query)
@@ -15,7 +15,7 @@ def insert_song(title, path):
 
 
 def get_song_titles():
-    query = "SELECT * FROM tracks"
+    query = "SELECT * FROM track"
     song_list = []
 
     with closing(connect_db()) as db:
@@ -29,10 +29,10 @@ def get_song_titles():
 #returns dict {id : field }
 def get_data(ids, field):
     results = {}
-    query = "SELECT {} FROM tracks WHERE".format(field)
+    query = "SELECT {} FROM track WHERE".format(field)
 
     for song_id in ids:
-        query.join(" tracks.id={} OR".format(song_id))
+        query.join(" track.id={} OR".format(song_id))
     query = query[:-3]
 
     with closing(connect_db()) as db:
@@ -46,7 +46,7 @@ def get_data(ids, field):
 
 
 def get_song_data(song_id):
-    query = "SELECT * FROM tracks WHERE tracks.id={}".format(song_id)
+    query = "SELECT * FROM track WHERE track.id={}".format(song_id)
 
     with closing(connect_db()) as db:
         results = db.cursor().execute(query)
@@ -57,7 +57,7 @@ def get_song_data(song_id):
 
 
 def display_database():
-    query = "SELECT * FROM tracks"
+    query = "SELECT * FROM track"
 
     with closing(connect_db()) as db:
         results = db.cursor().execute(query)
@@ -76,7 +76,7 @@ def init_db(app):
 
 def delete_db(app):
     with closing(connect_db()) as db:
-        query = "DROP TABLE IF EXISTS music.tracks"
+        query = "DROP TABLE IF EXISTS music.track"
         db.cursor().execute(query)
         db.commit()
     print 'table deleted'
