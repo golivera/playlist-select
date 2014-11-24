@@ -22,9 +22,11 @@ def home():
 
 @app.route('/add-song', methods=['POST'])
 def add_song():
-    song_id = request.form['songId']
+    song_id = request.args.get('songId', None)
+    if not song_id:
+        return json.dumps({'status': 'error', 'msg': 'no id provided'})
     queue.append(song_id)
-    return "added song {}".format(song_id)
+    return json.dumps({ 'status': 'success', 'songId': song_id });
 
 @app.route('/all-songs')
 def get_all_songs():

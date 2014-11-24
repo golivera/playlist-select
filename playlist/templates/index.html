@@ -9,7 +9,7 @@
     <section ng-app="mediaApp" ng-controller="mediaCtrl">
     <h1>Available</h1>
     <ul>
-        <li ng-repeat="song in availableSongs">
+        <li ng-repeat="song in availableSongs" ng-click="addSong(song)">
             <span>{{ song.name }}</span> 
         </li>
     </ul>
@@ -33,24 +33,26 @@
 
     mediaApp.controller('mediaCtrl', function ($scope, $http) {
         $http.get('/all-songs').success(function(data) {
+            console.log(data);
             $scope.availableSongs = data;
         });
 
+        $scope.addSong = function(song) {
+            console.log("id: " + song.id + " - " + song.name);
+            $http.post("{{ url_for('add_song') }}", {'songId': song.id}).
+                success(function(data) {
+                    console.log(data);
+                    var newSong = "<li data-song-id='" + song.id + "'>" + song.name + "</li>"; 
+                    $("#active-playlist").append(newSong);
+                }).
+                error(function(data) {
+                    console.log(data);
+                });
+        };
     });
 
 
     // Event Listeners
-    $("li").click(function() {
-        var songName = $(this).text();
-        var songId = $(this).data("song-id");
-        console.log("id: " + songId + " - " + songName);
-        $.post("{{ url_for('add_song') }}", {'songId': songId}, function(data) {
-            console.log(data);
-            var newSong = "<li data-song-id='" + songId + "'>" + songName + "</li>"; 
-            $("#active-playlist").append(newSong);
-        });
-    });
-
     $("#pause").click(function() {
         var action = $(this).text();
         if(action === "Pause") {
