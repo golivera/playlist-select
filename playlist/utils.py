@@ -42,8 +42,7 @@ def play_song(queue):
 
     print "Preparing to play song with id {}".format(queue[0])
 
-    song_data = mydb.get_song_data(queue.pop())
-    print song_data
+    song_data = mydb.get_song_data(queue.pop(0))
 
     if not song_data or not os.path.isfile(song_data['file_path']):
         return

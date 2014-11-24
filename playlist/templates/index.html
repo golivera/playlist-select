@@ -53,8 +53,12 @@
             $http.post("{{ url_for('add_song') }}", {'songId': song.id}).
                 success(function(data) {
                     console.log(data);
-                    var newSong = "<li data-song-id='" + song.id + "'>" + song.name + "</li>"; 
-                    $("#active-playlist").append(newSong);
+                    if(data.status == "success") {
+                        var newSong = "<li data-song-id='" + song.id + "'>" + song.name + "</li>"; 
+                        $("#active-playlist").append(newSong);
+                    } else {
+                        console.log("ERROR");
+                    }
                 }).
                 error(function(data) {
                     console.log(data);
