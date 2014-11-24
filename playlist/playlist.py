@@ -13,6 +13,7 @@ PASSWORD = 'Admin'
 
 app = Flask(__name__)
 app.config.from_object(__name__)
+app.static_path = '/static'
 queue = []
 
 
@@ -55,6 +56,8 @@ if __name__ == '__main__':
 
     if args.dev:
         print "Running in Debug Mode"
+        from flaskext.lesscss import lesscss
+        lesscss(app)
         app.debug = True
     app.run()
 
