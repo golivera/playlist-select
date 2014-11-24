@@ -60,3 +60,6 @@ docs/_build/
 # PyBuilder
 target/
 
+# Virtual Env Files
+bin
+include
