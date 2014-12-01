@@ -40,10 +40,10 @@ def play_song(queue):
         print "Queue is empty"
         return
 
-    print "Preparing to play song with id {}".format(queue[0])
+    song_id = queue.pop(0)
+    print "Preparing to play song with id {}".format(song_id)
 
-    song_data = mydb.get_song_data(queue.pop(0))
-
+    song_data = mydb.get_song_data(song_id)
     if not song_data or not os.path.isfile(song_data['file_path']):
         return
 
@@ -51,6 +51,7 @@ def play_song(queue):
     media = instance.media_new(unicode(song_data['file_path']))
     mediaplayer.set_media(media)
     mediaplayer.play()
+    return song_data
 
 
 def pause_song():
@@ -59,4 +60,5 @@ def pause_song():
 
 def stop_song():
     mediaplayer.stop()
+    return None
 

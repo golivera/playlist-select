@@ -7,10 +7,10 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='components.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='normalize.css') }}">
 </head>
-<body>
+<body ng-app="mediaApp" ng-controller="mediaCtrl">
     {% raw %}
     <div id="top-container">
-        <section ng-app="mediaApp" ng-controller="mediaCtrl" id="library-container">
+        <section id="library-container">
             <div class="title-1">Library</div>
             <ul>
                 <li ng-repeat="song in availableSongs" ng-click="addSong(song)">
@@ -27,13 +27,14 @@
     {% endraw %}
 
     <section id="media-player-container">
+        <div ng-show="currentSong != null">Current Playing</div>
         <div id="media-current-info">
-
+            <div ng-bind="currentSong"></div>
         </div>
         <div id="media-control-container">
-            <button type="button" class="media-action" id="stop">Stop</button>
-            <button type="button" class="media-action" id="pause">Pause</button>
-            <button type="button" class="media-action" id="play">Play</button>
+            <button type="button" ng-click="mediaAction('stop')" class="media-action">Stop</button>
+            <button type="button" ng-click="mediaAction('pause')" class="media-action">Pause</button>
+            <button type="button" ng-click="mediaAction('play')" class="media-action">Play</button>
         </div>
     </section>
 
@@ -43,6 +44,8 @@
     var mediaApp = angular.module('mediaApp', []);
 
     mediaApp.controller('mediaCtrl', function ($scope, $http) {
+        $scope.currentSong = null;
+
         $http.get('/all-songs').success(function(data) {
             console.log(data);
             $scope.availableSongs = data;
@@ -64,6 +67,20 @@
                     console.log(data);
                 });
         };
+        $scope.mediaAction = function(action) {
+            console.log(action);
+            $http.post("{{ url_for('process_media_action') }}", {'action': action}).
+                success(function(data) {
+                    if(data.action == "play") {
+                        $scope.currentSong = data.current_song.name;
+                    } else if (data.action == "stop") {
+                        $scope.currentSong = null; 
+                    }
+                }).
+                error(function(data) {
+                    console.log("MEDIA_ERROR");
+                });
+        };
     });
 
 
@@ -77,11 +94,5 @@
         }
     });
 
-    $(".media-action").click(function() {
-        var action = $(this).attr('id');
-        $.post("{{ url_for('process_media_action') }}", {'action': action}, function(data) {
-            console.log(data); 
-        });
-    });
     </script>
 </body>

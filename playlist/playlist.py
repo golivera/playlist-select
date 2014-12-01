@@ -14,7 +14,9 @@ PASSWORD = 'Admin'
 app = Flask(__name__)
 app.config.from_object(__name__)
 app.static_path = '/static'
+
 queue = []
+current_song = None
 
 
 @app.route('/')
@@ -36,16 +38,18 @@ def get_all_songs():
 
 @app.route('/media-action', methods=['POST'])
 def process_media_action():
-    action = request.form['action']
+    action = request.get_json()['action']
 
     if action == "play":
-        utils.play_song(queue)
+        current_song = utils.play_song(queue)
     elif action == "pause":
         utils.pause_song()
     elif action == "stop":
-        utils.stop_song()
+        current_song = utils.stop_song()
 
-    return "{}".format(action)
+    response = {'action': action, 'current_song': current_song}
+
+    return json.dumps(response)
 
 
 if __name__ == '__main__':
